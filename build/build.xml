@@ -184,7 +184,7 @@
 
 	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
 		<emma enabled="${emma.enabled}">
-			<instr instrpath="${compile.dir}" destdir="${compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
+			<instr instrpathref="${compile.dir}" destdir="${compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
 		</emma>
 
 	</target>
@@ -198,6 +198,7 @@
 
 				<txt outfile="${target}/coverage.txt" />
 				<html outfile="${target}/coverage.html" />
+				<xml outfile="${target}/coverage.xml" />
 			</report>
 		</emma>
 	</target>
