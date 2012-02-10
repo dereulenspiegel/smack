@@ -51,10 +51,10 @@ public class PrivacyTest extends SmackTestCase {
 			assertEquals(1, privacyItems.size());
 
 			// Assert the privacy item composition
-//			PrivacyItem receivedItem = (PrivacyItem) privacyItems.get(0);
-//			assertEquals(1, receivedItem.getOrder());
-//			assertEquals(PrivacyItem.Type.jid, receivedItem.getType());
-//			assertEquals(true, receivedItem.isAllow());
+			PrivacyItem receivedItem = (PrivacyItem) privacyItems.get(0);
+			assertEquals(1, receivedItem.getOrder());
+			assertEquals(PrivacyItem.Type.jid, receivedItem.getType());
+			assertEquals(true, receivedItem.isAllow());
 
 			privacyManager.deletePrivacyList(listName);
 		} catch (Exception e) {
