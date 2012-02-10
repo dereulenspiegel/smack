@@ -183,7 +183,7 @@
 
 	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
 		<emma enabled="${emma.enabled}">
-			<instr instrpathref="run.classpath" destdir="$(compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
+			<instr instrpath="${compile.dir}" destdir="$(compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
 		</emma>
 
 	</target>
@@ -325,7 +325,7 @@
 	<fileset dir="${basedir}/build">
 		<include name="*.jar" />
 	</fileset>
-	<pathelement location="${compile.dir}" />
+	<pathelement location="${compile.instr.dir}" />
 	<pathelement location="${test.dir}" />
 	<pathelement location="${resources.dir}" />
 </classpath>
