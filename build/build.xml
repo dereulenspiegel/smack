@@ -59,6 +59,7 @@
 	<property name="jingle.extension.merge.lib.dir" value="${basedir}/jingle/extension/build/merge" />
 	<property name="jingle.extension.lib.dir" value="${basedir}/jingle/extension/build/lib" />
 	<property name="src.dir" value="${basedir}/source" />
+	<property name="target" value="${basedir}/target" />
 
 	<!-- Test props - override these defaults in the properties file or in command line -->
 	<property name="test.host" value="localhost" />
@@ -183,7 +184,7 @@
 
 	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
 		<emma enabled="${emma.enabled}">
-			<instr instrpath="${compile.dir}" destdir="$(compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
+			<instr instrpath="${compile.dir}" destdir="${compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
 		</emma>
 
 	</target>
