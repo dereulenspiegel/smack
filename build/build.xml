@@ -197,7 +197,7 @@
 
 	</target>
 
-	<target name="emma.report" depends="emma.instr">
+	<target name="emma.report">
 		<emma enabled="${emma.enabled}">
 			<report sourcepath="${src.dir}">
 				<fileset dir="${target}">
