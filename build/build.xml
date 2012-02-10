@@ -47,6 +47,7 @@
 
 	<property file="${basedir}/build/build.properties" />
 	<property name="compile.dir" value="${basedir}/target/classes" />
+	<property name="compile.instr.dir" value="${basedir}/target/classes-instr" />
 	<property name="compile.test.dir" value="${basedir}/target/classes-test" />
 	<property name="compile.test-unit.dir" value="${basedir}/target/classes-test-unit" />
 	<property name="jar.dest.dir" value="${basedir}/target" />
@@ -57,6 +58,7 @@
 	<property name="resources.dir" value="${basedir}/build/resources" />
 	<property name="jingle.extension.merge.lib.dir" value="${basedir}/jingle/extension/build/merge" />
 	<property name="jingle.extension.lib.dir" value="${basedir}/jingle/extension/build/lib" />
+	<property name="src.dir" value="${basedir}/source" />
 
 	<!-- Test props - override these defaults in the properties file or in command line -->
 	<property name="test.host" value="localhost" />
@@ -78,6 +80,18 @@
 	<patternset id="messenger.test.cases">
 		<include name="org/jivesoftware/smack/**/Messenger*Test.java" />
 	</patternset>
+
+	<path id="emma.lib">
+		<pathelement location="${basedir}/build/emma.jar" />
+		<pathelement location="${basedir}/build/emma_ant.jar" />
+	</path>
+
+	<path id="run.classpath">
+		<fileset dir="${merge.lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
 
 	<!-- TARGETS -->
 	<!-- ======================================================================================= -->
@@ -158,6 +172,44 @@
 
 
 	</target>
+
+	<target name="emma" description="turns on EMMA instrumentation/reporting">
+		<property name="emma.enabled" value="true" />
+		<!-- EMMA instr class output directory: -->
+		<mkdir dir="${compile.instr.dir}" />
+	</target>
+
+	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
+		<emma enabled="${emma.enabled}">
+			<instr instrpathref="run.classpath" destdir="$(compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
+		</emma>
+
+		<!-- note from matt b: you could just as easily have a <junit> task here! -->
+		<java classname="Main" fork="true">
+			<classpath>
+				<pathelement location="${compile.instr.dir}" />
+				<path refid="run.classpath" />
+				<path refid="emma.lib" />
+			</classpath>
+			<jvmarg value="-Demma.coverage.out.file=${target}/coverage.emma" />
+			<jvmarg value="-Demma.coverage.out.merge=true" />
+		</java>
+
+	</target>
+
+	<target name="emma.report" depends="emma.instr">
+		<emma enabled="${emma.enabled}">
+			<report sourcepath="${src.dir}">
+				<fileset dir="${target}">
+					<include name="*.emma" />
+				</fileset>
+
+				<txt outfile="${target}/coverage.txt" />
+				<html outfile="${target}/coverage.html" />
+			</report>
+		</emma>
+	</target>
+
 
 	<!-- jar -->
 	<!-- ======================================================================================= -->
@@ -286,7 +338,7 @@
 </classpath>
 
 <formatter type="brief" usefile="false" />
-<formatter type="xml"/>
+<formatter type="xml" />
 <batchtest>
 	<fileset dir="${basedir}/test">
 		<patternset refid="${test.classes}" />
@@ -373,6 +425,7 @@
 <!-- ======================================================================================= -->
 <target name="clean" description="Deletes all generated content.">
 <delete dir="${javadoc.dest.dir}" />
+<delete dir="${compile.instr.dir}" />
 <delete dir="${compile.dir}" />
 <delete dir="${compile.test.dir}" />
 <delete dir="${compile-unit.test.dir}" />
