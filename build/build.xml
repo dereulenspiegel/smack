@@ -85,6 +85,8 @@
 		<pathelement location="${basedir}/build/emma.jar" />
 		<pathelement location="${basedir}/build/emma_ant.jar" />
 	</path>
+	
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
 	<path id="run.classpath">
 		<fileset dir="${merge.lib.dir}">
