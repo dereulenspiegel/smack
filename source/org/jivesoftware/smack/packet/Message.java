@@ -428,15 +428,17 @@ public class Message extends Packet {
         buf.append(">");
         // Add the subject in the default language
         Subject defaultSubject = getMessageSubject(null);
-        if(defaultSubject!=null){
-        	buf.append("<subject>").append(StringUtils.escapeForXML(defaultSubject.getSubject()));
-        	buf.append("</subject>");
+        if (defaultSubject != null) {
+            buf.append("<subject>").append(StringUtils.escapeForXML(defaultSubject.subject)).append("</subject>");
         }
-        //Add subjects in other languages
-        for ( Subject s : getSubjects()){
-        	buf.append("<subject xml:lang=\""+s.getLanguage()+"\">");
-        	buf.append(StringUtils.escapeForXML(s.getSubject()));
-        	buf.append("</subject>");
+        // Add the subject in other languages
+        for (Subject subject : getSubjects()) {
+            // Skip the default language
+            if(subject.equals(defaultSubject))
+                continue;
+            buf.append("<subject xml:lang=\"").append(subject.language).append("\">");
+            buf.append(StringUtils.escapeForXML(subject.subject));
+            buf.append("</subject>");
         }
         // Add the body in the default language
         Body defaultBody = getMessageBody(null);
@@ -540,24 +542,27 @@ public class Message extends Packet {
         }
 
 
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) { return false; }
-
-            Subject otherSubject = (Subject) o;
-
-            if (!language.equals(otherSubject.language)) {
-                return false;
-            }
-            return subject.equals(otherSubject.subject);
-
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + this.language.hashCode();
+            result = prime * result + this.subject.hashCode();
+            return result;
         }
 
-        public int hashCode() {
-            int result;
-            result = subject.hashCode();
-            result = 31 * result + language.hashCode();
-            return result;
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            Subject other = (Subject) obj;
+            // simplified comparison because language and subject are always set
+            return this.language.equals(other.language) && this.subject.equals(other.subject);
         }
     }
 
@@ -598,24 +603,27 @@ public class Message extends Packet {
             return message;
         }
 
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) { return false; }
-
-            Body otherBody = (Body) o;
-
-            if (language != null ? !language.equals(otherBody.language) : otherBody.language != null) {
-                return false;
-            }
-            return message.equals(otherBody.message);
-
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + this.language.hashCode();
+            result = prime * result + this.message.hashCode();
+            return result;
         }
 
-        public int hashCode() {
-            int result;
-            result = message.hashCode();
-            result = 31 * result + (language != null ? language.hashCode() : 0);
-            return result;
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            Body other = (Body) obj;
+            // simplified comparison because language and message are always set
+            return this.language.equals(other.language) && this.message.equals(other.message);
         }
         
     }

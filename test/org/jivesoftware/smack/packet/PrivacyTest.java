@@ -503,5 +503,3 @@ public class PrivacyTest extends SmackTestCase {
         }
     }
 }
-
-

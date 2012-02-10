@@ -1,7 +1,12 @@
 /**
  * $RCSfile$
+<<<<<<< HEAD
  * $Revision: 9920 $
  * $Date: 2008-02-16 00:32:46 +0800 (Sat, 16 Feb 2008) $
+=======
+ * $Revision$
+ * $Date$
+>>>>>>> remotes/svn_orig/master
  *
  * Copyright 2003-2007 Jive Software.
  *
@@ -67,9 +72,9 @@ public class ServiceDiscoveryManager {
 
     private EntityCapsManager capsManager;
 
-    private static Map<Connection, ServiceDiscoveryManager> instances =
-            new HashMap<Connection, ServiceDiscoveryManager>();
 
+    private static Map<Connection, ServiceDiscoveryManager> instances =
+            new ConcurrentHashMap<Connection, ServiceDiscoveryManager>();
     private Connection connection;
     private final List<String> features = new ArrayList<String>();
     private DataForm extendedInfo = null;
@@ -78,16 +83,19 @@ public class ServiceDiscoveryManager {
 
     // Create a new ServiceDiscoveryManager on every established connection
     static {
-        // Add service discovery for normal XMPP c2s connections
-        XMPPConnection.addConnectionCreationListener(new ConnectionCreationListener() {
+        Connection.addConnectionCreationListener(new ConnectionCreationListener() {
             public void connectionCreated(Connection connection) {
-                getInstanceFor(connection);
+                new ServiceDiscoveryManager(connection);
             }
         });
     }
 
     /**
+<<<<<<< HEAD
      * Creates a new ServiceDiscoveryManager for a given connection. This means that the 
+=======
+     * Creates a new ServiceDiscoveryManager for a given Connection. This means that the 
+>>>>>>> remotes/svn_orig/master
      * service manager will respond to any service discovery request that the connection may
      * receive. 
      * 
@@ -108,19 +116,13 @@ public class ServiceDiscoveryManager {
     }
 
     /**
-     * Returns the ServiceDiscoveryManager instance associated with a given connection.
+     * Returns the ServiceDiscoveryManager instance associated with a given Connection.
      * 
      * @param connection the connection used to look for the proper ServiceDiscoveryManager.
-     * @return the ServiceDiscoveryManager associated with a given connection.
+     * @return the ServiceDiscoveryManager associated with a given Connection.
      */
     public static ServiceDiscoveryManager getInstanceFor(Connection connection) {
-        synchronized (instances) {
-            ServiceDiscoveryManager serviceDiscoveryManager = instances.get(connection);
-            if (serviceDiscoveryManager != null) {
-                return serviceDiscoveryManager;
-            }
-            return new ServiceDiscoveryManager(connection);
-        }
+        return instances.get(connection);
     }
 
     /**
@@ -148,7 +150,7 @@ public class ServiceDiscoveryManager {
     /**
      * Returns the type of client that will be returned when asked for the client identity in a 
      * disco request. The valid types are defined by the category client. Follow this link to learn 
-     * the possible types: <a href="http://www.jabber.org/registrar/disco-categories.html#client">Jabber::Registrar</a>.
+     * the possible types: <a href="http://xmpp.org/registrar/disco-categories.html#client">Jabber::Registrar</a>.
      * 
      * @return the type of client that will be returned when asked for the client identity in a 
      *          disco request.
@@ -160,7 +162,7 @@ public class ServiceDiscoveryManager {
     /**
      * Sets the type of client that will be returned when asked for the client identity in a 
      * disco request. The valid types are defined by the category client. Follow this link to learn 
-     * the possible types: <a href="http://www.jabber.org/registrar/disco-categories.html#client">Jabber::Registrar</a>.
+     * the possible types: <a href="http://xmpp.org/registrar/disco-categories.html#client">Jabber::Registrar</a>.
      * 
      * @param type the type of client that will be returned when asked for the client identity in a 
      *          disco request.
@@ -240,9 +242,7 @@ public class ServiceDiscoveryManager {
         connection.addConnectionListener(new ConnectionListener() {
             public void connectionClosed() {
                 // Unregister this instance since the connection has been closed
-                synchronized (instances) {
-                    instances.remove(connection);
-                }
+                instances.remove(connection);
             }
 
             public void connectionClosedOnError(Exception e) {
@@ -334,6 +334,20 @@ public class ServiceDiscoveryManager {
                              (capsManager.getNode() + "#" +
                               getEntityCapsVersion()).equals(discoverInfo.getNode()))) {
                         addDiscoverInfoTo(response);
+                        // Set this client identity
+                        DiscoverInfo.Identity identity = new DiscoverInfo.Identity("client",
+                                getIdentityName());
+                        identity.setType(getIdentityType());
+                        response.addIdentity(identity);
+                        // Add the registered features to the response
+                        synchronized (features) {
+                            for (Iterator<String> it = getFeatures(); it.hasNext();) {
+                                response.addFeature(it.next());
+                            }
+                            if (extendedInfo != null) {
+                                response.addExtension(extendedInfo);
+                            }
+                        }
                     }
                     else {
                         // Disco#info was sent to a node. Check if we have information of the
@@ -604,7 +618,6 @@ public class ServiceDiscoveryManager {
         if (result.getType() == IQ.Type.ERROR) {
             throw new XMPPException(result.getError());
         }
-
         return (DiscoverInfo) result;
     }
 

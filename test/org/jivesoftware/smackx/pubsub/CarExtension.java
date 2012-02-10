@@ -41,5 +41,4 @@ class CarExtension implements PacketExtension
 		return "<" + getElementName() + " xmlns='" + getNamespace() + "'><paint color='" + 
 			getColor() + "'/><tires num='" + getNumTires() + "'/></" + getElementName() + ">";
 	}
-	
 }

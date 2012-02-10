@@ -26,9 +26,15 @@
 
     <!-- Smack Version -->
     <property name="version.major" value="3" />
+<<<<<<< HEAD
     <property name="version.minor" value="1" />
     <property name="version.revision" value="0" />
     <property name="version.extra" value="" /> 
+=======
+    <property name="version.minor" value="3" />
+    <property name="version.revision" value="0" />
+    <property name="version.extra" value="SNAPSHOT" /> 
+>>>>>>> remotes/svn_orig/master
 
     <if>
         <equals arg1="${version.extra}" arg2=""/>
@@ -98,8 +104,13 @@
             destdir="${compile.dir}"
             includeAntRuntime="no"
             debug="on"
+<<<<<<< HEAD
             source="1.5"
             target="1.5"
+=======
+            source="1.6"
+            target="1.6"
+>>>>>>> remotes/svn_orig/master
         >
             <src path="${basedir}/source" />
             <classpath>
@@ -113,8 +124,13 @@
             destdir="${compile.dir}/jingle/extension"
             includeAntRuntime="no"
             debug="on"
+<<<<<<< HEAD
             source="1.5"
             target="1.5"
+=======
+            source="1.6"
+            target="1.6"
+>>>>>>> remotes/svn_orig/master
         >
             <src path="${basedir}/jingle/extension/source" />
             <classpath>
@@ -141,8 +157,13 @@
             destdir="${compile.test.dir}"
             includeAntRuntime="no"
             debug="on"
+<<<<<<< HEAD
             source="1.5"
             target="1.5"
+=======
+            source="1.6"
+            target="1.6"
+>>>>>>> remotes/svn_orig/master
         >
             <src path="${test.dir}" />
             <classpath>

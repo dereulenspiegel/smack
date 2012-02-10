@@ -20,22 +20,13 @@
 
 package org.jivesoftware.smack.packet;
 
+import org.jivesoftware.smack.util.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.jivesoftware.smack.util.StringUtils;
 
 /**
  * Base class for XMPP packets. Every packet has a unique ID (which is automatically
@@ -62,20 +53,6 @@ public abstract class Packet {
      * answer will be <tt>null</tt>.
      */
     public static final String ID_NOT_AVAILABLE = "ID_NOT_AVAILABLE";
-    
-    /**
-     * Date format as defined in XEP-0082 - XMPP Date and Time Profiles.
-     * The time zone is set to UTC.
-     * <p>
-     * Date formats are not synchronized. Since multiple threads access the format concurrently,
-     * it must be synchronized externally. 
-     */
-    public static final DateFormat XEP_0082_UTC_FORMAT = new SimpleDateFormat(
-                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-    static {
-        XEP_0082_UTC_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
-
 
     /**
      * A prefix helps to make sure that ID's are unique across mutliple instances.
@@ -439,10 +416,14 @@ public abstract class Packet {
         return this.xmlns;
     }
 
+    /**
+     * Returns the default language used for all messages containing localized content.
+     * 
+     * @return the default language
+     */
     public static String getDefaultLanguage() {
         return DEFAULT_LANGUAGE;
     }
-
 
     public boolean equals(Object o) {
         if (this == o) return true;

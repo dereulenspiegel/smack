@@ -1,7 +1,12 @@
 /**
  * $RCSfile$
+<<<<<<< HEAD
  * $Revision: 7071 $
  * $Date: 2007-02-12 08:59:05 +0800 (Mon, 12 Feb 2007) $
+=======
+ * $Revision$
+ * $Date$
+>>>>>>> remotes/svn_orig/master
  *
  * Copyright 2003-2007 Jive Software.
  *

@@ -44,11 +44,15 @@ import java.util.*;
  */
 public final class SmackConfiguration {
 
-    private static final String SMACK_VERSION = "3.1.0";
+    private static final String SMACK_VERSION = "3.2.1";
 
     private static int packetReplyTimeout = 5000;
     private static int keepAliveInterval = 30000;
     private static Vector<String> defaultMechs = new Vector<String>();
+
+    private static boolean localSocks5ProxyEnabled = true;
+    private static int localSocks5ProxyPort = 7778;
+    private static int packetCollectorSize = 5000;
 
     private SmackConfiguration() {
     }
@@ -82,14 +86,22 @@ public final class SmackConfiguration {
                                     parseClassToLoad(parser);
                                 }
                                 else if (parser.getName().equals("packetReplyTimeout")) {
-                                    packetReplyTimeout =
-                                            parseIntProperty(parser, packetReplyTimeout);
+                                    packetReplyTimeout = parseIntProperty(parser, packetReplyTimeout);
                                 }
                                 else if (parser.getName().equals("keepAliveInterval")) {
                                     keepAliveInterval = parseIntProperty(parser, keepAliveInterval);
                                 }
                                 else if (parser.getName().equals("mechName")) {
                                     defaultMechs.add(parser.nextText());
+                                } 
+                                else if (parser.getName().equals("localSocks5ProxyEnabled")) {
+                                    localSocks5ProxyEnabled = Boolean.parseBoolean(parser.nextText());
+                                } 
+                                else if (parser.getName().equals("localSocks5ProxyPort")) {
+                                    localSocks5ProxyPort = parseIntProperty(parser, localSocks5ProxyPort);
+                                }
+                                else if (parser.getName().equals("packetCollectorSize")) {
+                                    packetCollectorSize = parseIntProperty(parser, packetCollectorSize);
                                 }
                             }
                             eventType = parser.next();
@@ -176,6 +188,29 @@ public final class SmackConfiguration {
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Gets the default max size of a packet collector before it will delete 
+     * the older packets.
+     * 
+     * @return The number of packets to queue before deleting older packets.
+     */
+    public static int getPacketCollectorSize() {
+    	return packetCollectorSize;
+    }
+
+    /**
+     * Sets the default max size of a packet collector before it will delete 
+     * the older packets.
+     * 
+     * @param The number of packets to queue before deleting older packets.
+     */
+    public static void setPacketCollectorSize(int collectorSize) {
+    	packetCollectorSize = collectorSize;
+    }
+    
+    /**
+>>>>>>> remotes/svn_orig/master
      * Add a SASL mechanism to the list to be used.
      *
      * @param mech the SASL mechanism to be added
@@ -228,6 +263,43 @@ public final class SmackConfiguration {
      */
     public static List<String> getSaslMechs() {
         return defaultMechs;
+    }
+
+    /**
+     * Returns true if the local Socks5 proxy should be started. Default is true.
+     * 
+     * @return if the local Socks5 proxy should be started
+     */
+    public static boolean isLocalSocks5ProxyEnabled() {
+        return localSocks5ProxyEnabled;
+    }
+
+    /**
+     * Sets if the local Socks5 proxy should be started. Default is true.
+     * 
+     * @param localSocks5ProxyEnabled if the local Socks5 proxy should be started
+     */
+    public static void setLocalSocks5ProxyEnabled(boolean localSocks5ProxyEnabled) {
+        SmackConfiguration.localSocks5ProxyEnabled = localSocks5ProxyEnabled;
+    }
+
+    /**
+     * Return the port of the local Socks5 proxy. Default is 7777.
+     * 
+     * @return the port of the local Socks5 proxy
+     */
+    public static int getLocalSocks5ProxyPort() {
+        return localSocks5ProxyPort;
+    }
+
+    /**
+     * Sets the port of the local Socks5 proxy. Default is 7777. If you set the port to a negative
+     * value Smack tries the absolute value and all following until it finds an open port.
+     * 
+     * @param localSocks5ProxyPort the port of the local Socks5 proxy to set
+     */
+    public static void setLocalSocks5ProxyPort(int localSocks5ProxyPort) {
+        SmackConfiguration.localSocks5ProxyPort = localSocks5ProxyPort;
     }
 
     private static void parseClassToLoad(XmlPullParser parser) throws Exception {

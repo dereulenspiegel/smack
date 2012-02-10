@@ -13,6 +13,7 @@
  */
 package org.jivesoftware.smackx.pubsub;
 
+import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.PacketExtension;
 import org.jivesoftware.smackx.pubsub.provider.ItemProvider;
 
@@ -44,6 +45,23 @@ public class PayloadItem<E extends PacketExtension> extends Item
 	private E payload;
 	
 	/**
+<<<<<<< HEAD
+=======
+	 * Create an <tt>Item</tt> with no id and a payload  The id will be set by the server.  
+	 * 
+	 * @param payloadExt A {@link PacketExtension} which represents the payload data.
+	 */
+	public PayloadItem(E payloadExt)
+	{
+		super();
+		
+		if (payloadExt == null)
+			throw new IllegalArgumentException("payload cannot be 'null'");
+		payload = payloadExt;
+	}
+
+	/**
+>>>>>>> remotes/svn_orig/master
 	 * Create an <tt>Item</tt> with an id and payload.  
 	 * 
 	 * @param itemId The id of this item.  It can be null if we want the server to set the id.
@@ -59,6 +77,31 @@ public class PayloadItem<E extends PacketExtension> extends Item
 	}
 	
 	/**
+<<<<<<< HEAD
+=======
+	 * Create an <tt>Item</tt> with an id, node id and payload.  
+	 * 
+	 * <p>
+	 * <b>Note:</b> This is not valid for publishing an item to a node, only receiving from 
+	 * one as part of {@link Message}.  If used to create an Item to publish 
+	 * (via {@link LeafNode#publish(Item)}, the server <i>may</i> return an
+	 * error for an invalid packet.
+	 * 
+	 * @param itemId The id of this item.
+	 * @param nodeId The id of the node the item was published to.
+	 * @param payloadExt A {@link PacketExtension} which represents the payload data.
+	 */
+	public PayloadItem(String itemId, String nodeId, E payloadExt)
+	{
+		super(itemId, nodeId);
+		
+		if (payloadExt == null)
+			throw new IllegalArgumentException("payload cannot be 'null'");
+		payload = payloadExt;
+	}
+	
+	/**
+>>>>>>> remotes/svn_orig/master
 	 * Get the payload associated with this <tt>Item</tt>.  Customising the payload
 	 * parsing from the server can be accomplished as described in {@link ItemProvider}.
 	 * 
@@ -69,6 +112,7 @@ public class PayloadItem<E extends PacketExtension> extends Item
 		return payload;
 	}
 	
+	@Override
 	public String toXML()
 	{
 		StringBuilder builder = new StringBuilder("<item");
@@ -80,6 +124,11 @@ public class PayloadItem<E extends PacketExtension> extends Item
 			builder.append("'");
 		}
 		
+        if (getNode() != null) {
+            builder.append(" node='");
+            builder.append(getNode());
+            builder.append("'");
+        }
 		builder.append(">");
 		builder.append(payload.toXML());
 		builder.append("</item>");

@@ -54,7 +54,11 @@ public class MessageEventManager {
     /**
      * Creates a new message event manager.
      *
+<<<<<<< HEAD
      * @param con a Connection.
+=======
+     * @param con a Connection to a XMPP server.
+>>>>>>> remotes/svn_orig/master
      */
     public MessageEventManager(Connection con) {
         this.con = con;

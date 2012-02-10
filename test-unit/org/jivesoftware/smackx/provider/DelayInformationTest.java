@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.packet.DelayInfo;
 import org.jivesoftware.smackx.packet.DelayInformation;
 import org.junit.Test;
@@ -213,7 +213,7 @@ public class DelayInformationTest {
             .asString(outputProperties);
         
         delayInfo = (DelayInfo) p.parseExtension(getParser(control, "delay"));
-        Date controlDate = Packet.XEP_0082_UTC_FORMAT.parse("2008-06-08T09:16:20.0Z");
+        Date controlDate = StringUtils.parseXEP0082Date("2008-06-08T09:16:20.0Z");
         
         assertEquals(controlDate, delayInfo.getStamp());
 

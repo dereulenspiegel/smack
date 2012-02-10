@@ -48,13 +48,19 @@ final public class PubSubManager
 	private Map<String, Node> nodeMap = new ConcurrentHashMap<String, Node>();
 	
 	/**
+<<<<<<< HEAD
 	 * Create a pubsub manager associated to the specified connection.
+=======
+	 * Create a pubsub manager associated to the specified connection.  Defaults the service
+	 * name to <i>pubsub</i>
+>>>>>>> remotes/svn_orig/master
 	 * 
 	 * @param connection The XMPP connection
 	 */
 	public PubSubManager(Connection connection)
 	{
 		con = connection;
+		to = "pubsub." + connection.getServiceName();
 	}
 	
 	/**

@@ -310,14 +310,3 @@ class ReverseListIterator implements Iterator {
         _i.remove();
     }
 }
-
-
-
-
-
-
-
-
-
-
-

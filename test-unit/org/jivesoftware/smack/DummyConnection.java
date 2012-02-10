@@ -228,4 +228,11 @@ public class DummyConnection extends Connection {
             listenerWrapper.notifyListener(packet);
         }
     }
+
+	@Override
+	public void setRosterStorage(RosterStorage storage)
+			throws IllegalStateException {
+		//TODOD: Implement a dummy roster storage
+		
+	}
 }

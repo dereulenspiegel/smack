@@ -31,5 +31,4 @@ public class CarExtensionProvider implements PacketExtensionProvider
 		while (parser.next() != XmlPullParser.END_TAG);
 		return new CarExtension(color, numTires);
 	}
-	
 }

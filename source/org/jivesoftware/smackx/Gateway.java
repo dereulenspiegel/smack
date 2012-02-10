@@ -208,10 +208,10 @@ public class Gateway {
 		register.setFrom(connection.getUser());
 		register.setTo(entityJID);
 		register.setType(IQ.Type.SET);
-		register.setUsername(username);
-		register.setPassword(password);
+		register.setAttribute("username", username);
+		register.setAttribute("password", password);
 		for(String s : fields.keySet()){
-			register.addAttribute(s, fields.get(s));
+			register.setAttribute(s, fields.get(s));
 		}
 		PacketCollector resultCollector = 
 			connection.createPacketCollector(new PacketIDFilter(register.getPacketID())); 

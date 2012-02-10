@@ -63,7 +63,6 @@ public class Roster {
     private final List<RosterListener> rosterListeners;
     private Map<String, Map<String, Presence>> presenceMap;
     // The roster is marked as initialized when at least a single roster packet
-    // has been recieved and processed.
     boolean rosterInitialized = false;
     private PresencePacketListener presencePacketListener;
 
@@ -123,8 +122,10 @@ public class Roster {
         PacketFilter presenceFilter = new PacketTypeFilter(Presence.class);
         presencePacketListener = new PresencePacketListener();
         connection.addPacketListener(presencePacketListener, presenceFilter);
+        
         // Listen for connection events
-        connection.addConnectionListener(new ConnectionListener() {
+        final ConnectionListener connectionListener = new AbstractConnectionListener() {
+            
             public void connectionClosed() {
                 // Changes the presence available contacts to unavailable
                 setOfflinePresences();
@@ -134,20 +135,22 @@ public class Roster {
                 // Changes the presence available contacts to unavailable
                 setOfflinePresences();
             }
-
-            public void reconnectingIn(int seconds) {
-                // Ignore
-            }
-
-            public void reconnectionFailed(Exception e) {
-                // Ignore
-            }
-
-            public void reconnectionSuccessful() {
-                // Ignore
-            }
-        });
+        };
         
+        // if not connected add listener after successful login
+        if(!this.connection.isConnected()) {
+            Connection.addConnectionCreationListener(new ConnectionCreationListener() {
+                
+                public void connectionCreated(Connection connection) {
+                    if(connection.equals(Roster.this.connection)) {
+                        Roster.this.connection.addConnectionListener(connectionListener);
+                    }
+                    
+                }
+            });
+        } else {
+            connection.addConnectionListener(connectionListener);
+        }
     }
 
     /**
@@ -184,16 +187,18 @@ public class Roster {
      * Reloads the entire roster from the server. This is an asynchronous operation,
      * which means the method will return immediately, and the roster will be
      * reloaded at a later point when the server responds to the reload request.
+     * 
+     * @throws IllegalStateException if connection is not logged in or logged in anonymously
      */
     public void reload() {
-    	RosterPacket packet = new RosterPacket();
-    	if(persistentStorage!=null){
-    		packet.setVersion(persistentStorage.getRosterVersion());
-    	}
-    	requestPacketId = packet.getPacketID();
-    	PacketFilter idFilter = new PacketIDFilter(requestPacketId);
-    	connection.addPacketListener(new RosterResultListener(), idFilter);
-        connection.sendPacket(packet);
+        if (!connection.isAuthenticated()) {
+            throw new IllegalStateException("Not logged in to server.");
+        }
+        if (connection.isAnonymous()) {
+            throw new IllegalStateException("Anonymous users can't have a roster.");
+        }
+
+        connection.sendPacket(new RosterPacket());
     }
 
     /**
@@ -226,11 +231,19 @@ public class Roster {
      *
      * @param name the name of the group.
      * @return a new group.
+     * @throws IllegalStateException if connection is not logged in or logged in anonymously
      */
     public RosterGroup createGroup(String name) {
+        if (!connection.isAuthenticated()) {
+            throw new IllegalStateException("Not logged in to server.");
+        }
+        if (connection.isAnonymous()) {
+            throw new IllegalStateException("Anonymous users can't have a roster.");
+        }
         if (groups.containsKey(name)) {
             throw new IllegalArgumentException("Group with name " + name + " alread exists.");
         }
+        
         RosterGroup group = new RosterGroup(name, connection);
         groups.put(name, group);
         return group;
@@ -245,8 +258,16 @@ public class Roster {
      * @param groups the list of group names the entry will belong to, or <tt>null</tt> if the
      *               the roster entry won't belong to a group.
      * @throws XMPPException if an XMPP exception occurs.
+     * @throws IllegalStateException if connection is not logged in or logged in anonymously
      */
     public void createEntry(String user, String name, String[] groups) throws XMPPException {
+        if (!connection.isAuthenticated()) {
+            throw new IllegalStateException("Not logged in to server.");
+        }
+        if (connection.isAnonymous()) {
+            throw new IllegalStateException("Anonymous users can't have a roster.");
+        }
+
         // Create and send roster entry creation packet.
         RosterPacket rosterPacket = new RosterPacket();
         rosterPacket.setType(IQ.Type.SET);
@@ -408,8 +429,16 @@ public class Roster {
      *
      * @param entry a roster entry.
      * @throws XMPPException if an XMPP error occurs.
+     * @throws IllegalStateException if connection is not logged in or logged in anonymously
      */
     public void removeEntry(RosterEntry entry) throws XMPPException {
+        if (!connection.isAuthenticated()) {
+            throw new IllegalStateException("Not logged in to server.");
+        }
+        if (connection.isAnonymous()) {
+            throw new IllegalStateException("Anonymous users can't have a roster.");
+        }
+
         // Only remove the entry if it's in the entry list.
         // The actual removal logic takes place in RosterPacketListenerprocess>>Packet(Packet)
         if (!entries.containsKey(entry.getUser())) {
@@ -441,7 +470,7 @@ public class Roster {
      * @return the number of entries in the roster.
      */
     public int getEntryCount() {
-		return getEntries().size();
+        return getEntries().size();
     }
 
     /**
@@ -517,7 +546,7 @@ public class Roster {
      * @return the roster group with the specified name.
      */
     public RosterGroup getGroup(String name) {
-		return groups.get(name);
+        return groups.get(name);
     }
 
     /**
@@ -526,11 +555,11 @@ public class Roster {
      * @return the number of groups in the roster.
      */
     public int getGroupCount() {
-		return groups.size();
+        return groups.size();
     }
 
     /**
-     * Returns an unmodiable collections of all the roster groups.
+     * Returns an unmodifiable collections of all the roster groups.
      *
      * @return an iterator for all roster groups.
      */
@@ -941,7 +970,6 @@ public class Roster {
 			connection.removePacketListener(this);
 		}
     }
-
     /**
      * Listens for all roster packets and processes them.
      */
@@ -992,7 +1020,6 @@ public class Roster {
                 rosterInitialized = true;
                 Roster.this.notifyAll();
             }
-           
             // Fire event for roster listeners.
             fireRosterChangedEvent(addedEntries, updatedEntries, deletedEntries);
         }

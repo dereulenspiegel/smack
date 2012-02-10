@@ -65,13 +65,13 @@ import java.util.List;
  *
  * @author Gaston Dombiak
  */
-public class RosterTest extends SmackTestCase {
+public class RosterSmackTest extends SmackTestCase {
 
     /**
-     * Constructor for RosterTest.
+     * Constructor for RosterSmackTest.
      * @param name
      */
-    public RosterTest(String name) {
+    public RosterSmackTest(String name) {
         super(name);
     }
 
@@ -366,7 +366,7 @@ public class RosterTest extends SmackTestCase {
 
 
             // Log in from another resource so we can test the roster
-            Connection con2 = createConnection();
+            XMPPConnection con2 = createConnection();
             con2.connect();
             con2.login(getUsername(0), getUsername(0), "MyNewResource");
 
@@ -446,18 +446,12 @@ public class RosterTest extends SmackTestCase {
             }
 
             assertNull("The group Amigos still exists", roster.getGroup("Amigos"));
-            assertNotNull("The group with no name does not exist", roster.getGroup(""));
+            assertNull("The group with no name does exist", roster.getGroup(""));
+            assertEquals("There are still groups in the roster", 0, roster.getGroupCount());
             assertEquals(
-                "Wrong number of entries in the group with no name",
+                "Wrong number of unfiled entries",
                 2,
-                roster.getGroup("").getEntryCount());
-
-            /*assertEquals("There are still groups in the roster", 0, roster.getGroupCount());
-            assertEquals(
-                "Wrong number of entries in the group \"\" ",
-                2,
-                roster.getUnfiledEntryCount());*/
-
+                roster.getUnfiledEntryCount());
 
             Thread.sleep(200);
         }
@@ -486,7 +480,7 @@ public class RosterTest extends SmackTestCase {
             // Create another connection for the same user of connection 1
             ConnectionConfiguration connectionConfiguration =
                     new ConnectionConfiguration(getHost(), getPort(), getServiceName());
-            Connection conn4 = new XMPPConnection(connectionConfiguration);
+            XMPPConnection conn4 = new XMPPConnection(connectionConfiguration);
             conn4.connect();
             conn4.login(getUsername(1), getUsername(1), "Home");
 
@@ -559,7 +553,7 @@ public class RosterTest extends SmackTestCase {
         // Create another connection for the same user of connection 1
         ConnectionConfiguration connectionConfiguration =
                 new ConnectionConfiguration(getHost(), getPort(), getServiceName());
-        Connection conn4 = new XMPPConnection(connectionConfiguration);
+        XMPPConnection conn4 = new XMPPConnection(connectionConfiguration);
         conn4.connect();
         conn4.login(getUsername(1), getUsername(1), "Home");
 
@@ -624,7 +618,7 @@ public class RosterTest extends SmackTestCase {
         // Create another connection for the same user of connection 0
         ConnectionConfiguration connectionConfiguration =
                 new ConnectionConfiguration(getHost(), getPort(), getServiceName());
-        Connection conn2 = new XMPPConnection(connectionConfiguration);
+        XMPPConnection conn2 = new XMPPConnection(connectionConfiguration);
         conn2.connect();
         conn2.login(getUsername(0), getUsername(0), "Home");
 
@@ -746,7 +740,7 @@ public class RosterTest extends SmackTestCase {
     }
 
     protected void setUp() throws Exception {
-        //Connection.DEBUG_ENABLED = false;
+        //XMPPConnection.DEBUG_ENABLED = false;
 
         try  {
             Thread.sleep(500);
