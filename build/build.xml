@@ -85,7 +85,7 @@
 		<pathelement location="${basedir}/build/emma.jar" />
 		<pathelement location="${basedir}/build/emma_ant.jar" />
 	</path>
-	
+
 	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
 
 	<path id="run.classpath">
@@ -185,17 +185,6 @@
 		<emma enabled="${emma.enabled}">
 			<instr instrpathref="run.classpath" destdir="$(compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true" />
 		</emma>
-
-		<!-- note from matt b: you could just as easily have a <junit> task here! -->
-		<java classname="Main" fork="true">
-			<classpath>
-				<pathelement location="${compile.instr.dir}" />
-				<path refid="run.classpath" />
-				<path refid="emma.lib" />
-			</classpath>
-			<jvmarg value="-Demma.coverage.out.file=${target}/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=true" />
-		</java>
 
 	</target>
 
@@ -313,6 +302,8 @@
 </if>
 
 <junit printsummary="on" fork="true" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
+<jvmarg value="-Demma.coverage.out.file=${target}/coverage.emma" />
+<jvmarg value="-Demma.coverage.out.merge=true" />
 
 <sysproperty key="smack.test.host" value="${test.host}" />
 <sysproperty key="smack.test.port" value="${test.port}" />
