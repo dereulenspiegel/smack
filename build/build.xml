@@ -286,7 +286,7 @@
 </classpath>
 
 <formatter type="brief" usefile="false" />
-
+<formatter type="xml"/>
 <batchtest>
 	<fileset dir="${basedir}/test">
 		<patternset refid="${test.classes}" />
