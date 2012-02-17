@@ -48,7 +48,7 @@ public final class SmackConfiguration {
 
     private static int packetReplyTimeout = 5000;
     private static int keepAliveInterval = 30000;
-    private static Vector<String> defaultMechs = new Vector<String>();
+    private static List<String> defaultMechs = new ArrayList<String>();
 
     private static boolean localSocks5ProxyEnabled = true;
     private static int localSocks5ProxyPort = 7778;
