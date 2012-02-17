@@ -127,7 +127,7 @@
     <extensionProvider>
     	<elementName>delay</elementName>
         <namespace>urn:xmpp:delay</namespace>
-        <className>org.jivesoftware.smackx.provider.DelayInfoProvider</className>
+        <className>org.jivesoftware.smackx.provider.DelayInformationProvider</className>
     </extensionProvider>
 
     <!-- Version -->
