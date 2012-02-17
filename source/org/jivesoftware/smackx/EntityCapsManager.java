@@ -26,6 +26,7 @@ import org.jivesoftware.smack.filter.PacketTypeFilter;
 import org.jivesoftware.smack.filter.PacketExtensionFilter;
 import org.jivesoftware.smack.provider.ProviderManager;
 import org.jivesoftware.smack.util.Base64;
+import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smackx.provider.CapsExtensionProvider;
 import org.jivesoftware.smackx.packet.DiscoverInfo;
 import org.jivesoftware.smackx.packet.CapsExtension;
@@ -252,7 +253,9 @@ public class EntityCapsManager {
             DataForm extendedInfo) {
         String s = "";
         // Add identity
-        s += "client/" + identityType + "/"+identityLanguage+"/" + identityName + "<";
+        s += "client/" + StringUtils.trimToEmptyString(identityType) + 
+        		"/"+StringUtils.trimToEmptyString(identityLanguage)+"/" + 
+        		StringUtils.trimToEmptyString(identityName) + "<";
         StringBuffer buffer = new StringBuffer();
         // Add features
         synchronized (features) {

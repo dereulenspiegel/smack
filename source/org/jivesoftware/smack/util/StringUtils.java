@@ -550,6 +550,13 @@ public class StringUtils {
         }
         return new String(randBuffer);
     }
+    
+    public static String trimToEmptyString(String s){
+    	if(s==null){
+    		return "";
+    	}
+    	return s.trim();
+    }
 
     private StringUtils() {
         // Not instantiable.
