@@ -22,7 +22,6 @@ package org.jivesoftware.smack;
 
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.collections.CopyOnWriteWeakArraySet;
-import org.jivesoftware.smack.util.collections.WeakHashSet;
 
 import java.lang.ref.WeakReference;
 import java.util.Set;
