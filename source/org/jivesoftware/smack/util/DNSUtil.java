@@ -33,6 +33,7 @@ import javax.naming.directory.InitialDirContext;
  *
  * @author Matt Tucker
  */
+@SuppressWarnings("unchecked")
 public class DNSUtil {
 
     /**
@@ -45,7 +46,8 @@ public class DNSUtil {
 
     static {
         try {
-            Hashtable env = new Hashtable();
+            @SuppressWarnings("rawtypes")
+			Hashtable env = new Hashtable();
             env.put("java.naming.factory.initial", "com.sun.jndi.dns.DnsContextFactory");
             context = new InitialDirContext(env);
         }
