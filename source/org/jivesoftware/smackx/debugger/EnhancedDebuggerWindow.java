@@ -223,7 +223,7 @@ public class EnhancedDebuggerWindow {
         JPanel iqProvidersPanel = new JPanel();
         iqProvidersPanel.setLayout(new GridLayout(1, 1));
         iqProvidersPanel.setBorder(BorderFactory.createTitledBorder("Installed IQ Providers"));
-        Vector<String> providers = new Vector<String>();
+        java.util.List<String> providers = new ArrayList<String>();
         for (Object provider : ProviderManager.getInstance().getIQProviders()) {
             if (provider.getClass() == Class.class) {
                 providers.add(((Class) provider).getName());
@@ -234,7 +234,7 @@ public class EnhancedDebuggerWindow {
         }
         // Sort the collection of providers
         Collections.sort(providers);
-        JList list = new JList(providers);
+        JList list = new JList(providers.toArray());
         iqProvidersPanel.add(new JScrollPane(list));
         informationPanel.add(iqProvidersPanel);
 
@@ -253,7 +253,7 @@ public class EnhancedDebuggerWindow {
         }
         // Sort the collection of providers
         Collections.sort(providers);
-        list = new JList(providers);
+        list = new JList(providers.toArray());
         extensionProvidersPanel.add(new JScrollPane(list));
         informationPanel.add(extensionProvidersPanel);
 
