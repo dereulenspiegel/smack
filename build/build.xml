@@ -65,14 +65,14 @@
 	<property name="cobertura.dir" value="${basedir}/build" />
 
 	<path id="cobertura.classpath">
-	    <fileset dir="${cobertura.dir}">
-	        <include name="cobertura.jar" />
-	        <include name="lib/**/*.jar" />
-	    </fileset>
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
 	</path>
-	
-	<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
-	
+
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+
 	<!-- Test props - override these defaults in the properties file or in command line -->
 	<property name="test.host" value="localhost" />
 	<property name="test.port" value="5222" />
@@ -192,7 +192,7 @@
 		<property name="emma.enabled" value="true" />
 		<!-- EMMA instr class output directory: -->
 		<mkdir dir="${compile.instr.dir}" />
-		<mkdir dir="${report.path}" />
+		<mkdir dir="${report.path}/emma" />
 	</target>
 
 	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
@@ -214,8 +214,9 @@
 			</fileset>
 		</cobertura-instrument>
 	</target>
-	
+
 	<target name="cobertura.report">
+		<mkdir dir="${report.path}/cobertura" />
 		<cobertura-report format="xml" destdir="${report.path}" srcdir="${src.dir}" />
 	</target>
 
@@ -404,6 +405,7 @@
 <!-- checkcode -->
 <!-- ======================================================================================= -->
 <target name="pmd">
+<mkdir dir="${report.path}/pmd" />
 <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
 <classpath>
 	<pathelement location="${basedir}/build/pmd.jar" />
@@ -423,6 +425,7 @@
 </target>
 
 <target name="cpd">
+<mkdir dir="${report.path}/cpd" />
 <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask">
 <classpath>
 	<pathelement location="${basedir}/build/pmd.jar" />
