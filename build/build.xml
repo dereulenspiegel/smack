@@ -217,7 +217,7 @@
 
 	<target name="cobertura.report">
 		<mkdir dir="${report.path}/cobertura" />
-		<cobertura-report format="xml" destdir="${report.path}" srcdir="${src.dir}" />
+		<cobertura-report format="xml" destdir="${report.path}/cobertura" srcdir="${src.dir}" />
 	</target>
 
 	<target name="emma.report">
