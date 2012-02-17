@@ -202,7 +202,7 @@
 
 	</target>
 
-	<target name="cobertura.instr">
+	<target name="cobertura.instr" depends="compile, compile-test">
 		<delete file="cobertura.ser" />
 		<cobertura-instrument todir="${compile.instr.dir}">
 			<fileset dir="${compile.dir}">
