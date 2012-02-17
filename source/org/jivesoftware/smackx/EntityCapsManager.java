@@ -255,16 +255,18 @@ public class EntityCapsManager {
         // Add identity
         // FIXME language
         s += "client/" + identityType + "//" + identityName + "<";
-
+        StringBuffer buffer = new StringBuffer();
         // Add features
         synchronized (features) {
             SortedSet<String> fs = new TreeSet<String>();
             for (String f : features) {
                 fs.add(f);
             }
-
+            
+            
+            buffer.append(s);
             for (String f : fs) {
-                s += f + "<";
+                buffer.append(f+"<");
             }
         }
 
@@ -291,19 +293,19 @@ public class EntityCapsManager {
 
                 // Add FORM_TYPE values
                 if (ft != null) {
-                    s += formFieldValuesToCaps(ft.getValues());
+                    buffer.append(formFieldValuesToCaps(ft.getValues()));
                 }
 
                 // Add the other values
                 for (FormField f : fs) {
-                    s += f.getVariable() + "<";
-                    s += formFieldValuesToCaps(f.getValues());
+                    buffer.append(f.getVariable() + "<");
+                    buffer.append(formFieldValuesToCaps(f.getValues()));
                 }
             }
         }
 
 
-        setCurrentCapsVersion(discoverInfo, capsToHash(s));
+        setCurrentCapsVersion(discoverInfo, capsToHash(buffer.toString()));
     }
 
     /**
