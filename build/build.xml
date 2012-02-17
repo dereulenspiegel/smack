@@ -311,6 +311,7 @@
 <jvmarg value="-Demma.coverage.out.file=${target}/coverage.emma" />
 <jvmarg value="-Demma.coverage.out.merge=true" />
 
+	
 <sysproperty key="smack.test.host" value="${test.host}" />
 <sysproperty key="smack.test.port" value="${test.port}" />
 <sysproperty key="smack.test.admin.username" value="${test.admin.username}" />
@@ -318,6 +319,7 @@
 <sysproperty key="smack.test.admin.resource" value="${test.admin.resource}" />
 <sysproperty key="smack.debug" value="${test.smack.debug}" />
 
+<classpath location="${compile.instr.dir}" />
 <classpath>
 	<fileset dir="${basedir}/build/build">
 		<include name="xmlunit.jar" />
@@ -331,7 +333,7 @@
 	<fileset dir="${basedir}/build">
 		<include name="*.jar" />
 	</fileset>
-	<pathelement location="${compile.instr.dir}" />
+	<pathelement location="${compile.dir}" />
 	<pathelement location="${test.dir}" />
 	<pathelement location="${resources.dir}" />
 </classpath>
