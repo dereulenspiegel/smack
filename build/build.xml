@@ -70,6 +70,8 @@
 	    </fileset>
 	</path>
 	
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties"/>
+	
 	<!-- Test props - override these defaults in the properties file or in command line -->
 	<property name="test.host" value="localhost" />
 	<property name="test.port" value="5222" />
