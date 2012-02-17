@@ -60,6 +60,7 @@
 	<property name="jingle.extension.lib.dir" value="${basedir}/jingle/extension/build/lib" />
 	<property name="src.dir" value="${basedir}/source" />
 	<property name="target" value="${basedir}/target" />
+	<property name="report.path" value="${basedir}/reports" />
 
 	<property name="cobertura.dir" value="${basedir}/build" />
 
@@ -191,11 +192,12 @@
 		<property name="emma.enabled" value="true" />
 		<!-- EMMA instr class output directory: -->
 		<mkdir dir="${compile.instr.dir}" />
+		<mkdir dir="${report.path}" />
 	</target>
 
 	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
 		<emma enabled="${emma.enabled}">
-			<instr instrpath="${compile.dir}" destdir="${compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true">
+			<instr instrpath="${compile.dir}" destdir="${compile.instr.dir}" metadatafile="${report.path}/metadata.emma" merge="true">
 				<!-- <instrpath>
 					<fileset dir="${compile.dir}" includes="**/*.class" />
 				</instrpath> -->
@@ -214,19 +216,19 @@
 	</target>
 	
 	<target name="cobertura.report">
-		<cobertura-report format="xml" destdir="${target}/cobertura.xml" srcdir="${src.dir}" />
+		<cobertura-report format="xml" destdir="${report.path}" srcdir="${src.dir}" />
 	</target>
 
 	<target name="emma.report">
 		<emma enabled="${emma.enabled}">
 			<report sourcepath="${src.dir}">
-				<fileset dir="${target}">
+				<fileset dir="${report.path}">
 					<include name="*.emma" />
 				</fileset>
 
-				<txt outfile="${target}/coverage.txt" />
-				<html outfile="${target}/coverage.html" />
-				<xml outfile="${target}/coverage.xml" />
+				<txt outfile="${report.path}/emma/coverage.txt" />
+				<html outfile="${report.path}/emma/coverage.html" />
+				<xml outfile="${report.path}/emma/coverage.xml" />
 			</report>
 		</emma>
 	</target>
@@ -332,7 +334,7 @@
 </if>
 
 <junit printsummary="on" fork="true" haltonfailure="false" failureproperty="tests.failed" showoutput="true">
-<jvmarg value="-Demma.coverage.out.file=${target}/coverage.emma" />
+<jvmarg value="-Demma.coverage.out.file=${report.path}/coverage.emma" />
 <jvmarg value="-Demma.coverage.out.merge=true" />
 
 <sysproperty key="net.sourceforge.cobertura.datafile" file="${basedir}/cobertura.ser" />
@@ -412,8 +414,8 @@
 <pmd shortFilenames="true">
 <ruleset>migrating</ruleset>
 <ruleset>finalizers</ruleset>
-<formatter type="html" toFile="target/pmd_report.html" toConsole="true" />
-<formatter type="xml" toFile="target/pmd_report.xml" toConsole="true" />
+<formatter type="html" toFile="${report.path}/pmd/report.html" toConsole="true" />
+<formatter type="xml" toFile="${report.path}/pmd/report.xml" toConsole="true" />
 <fileset dir="source/">
 	<include name="**/*.java" />
 </fileset>
@@ -428,7 +430,7 @@
 	<pathelement location="${basedir}/build/jaxen.jar" />
 </classpath>
 </taskdef>
-<cpd minimumTokenCount="100" outputFile="target/cpd_report.xml" format="xml">
+<cpd minimumTokenCount="100" outputFile="${report.path}/cpd/report.xml" format="xml">
 <fileset dir="source/">
 	<include name="**/*.java" />
 </fileset>
