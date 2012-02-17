@@ -203,8 +203,9 @@ public class DiscoverInfo extends IQ {
         private String category;
         private String name;
         private String type;
+        private String language;
 
-        /**
+		/**
          * Creates a new identity for an XMPP entity.
          * 
          * @param category the entity's category.
@@ -213,6 +214,11 @@ public class DiscoverInfo extends IQ {
         public Identity(String category, String name) {
             this.category = category;
             this.name = name;
+        }
+        
+        public Identity(String category, String name, String language) {
+        	this(category,name);
+            this.language = language;
         }
 
         /**
@@ -253,6 +259,14 @@ public class DiscoverInfo extends IQ {
         public void setType(String type) {
             this.type = type;
         }
+        
+        public String getLanguage() {
+			return language;
+		}
+
+		public void setLanguage(String language) {
+			this.language = language;
+		}
 
         public String toXML() {
             StringBuilder buf = new StringBuilder();
@@ -260,6 +274,9 @@ public class DiscoverInfo extends IQ {
             buf.append(" name=\"").append(name).append("\"");
             if (type != null) {
                 buf.append(" type=\"").append(type).append("\"");
+            }
+            if(language!=null){
+            	buf.append(" xml:lang=\"").append(language).append("\"");
             }
             buf.append("/>");
             return buf.toString();

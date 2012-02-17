@@ -60,7 +60,9 @@ public class ServiceDiscoveryManager {
 
     private static String identityName = "Smack";
     private static String identityType = "pc";
-    private static String entityNode = "http://www.igniterealtime.org/projects/smack/";
+    private static String identityLanguage = "en";
+
+	private static String entityNode = "http://www.igniterealtime.org/projects/smack/";
     
     private static boolean cacheNonCaps=true;
 
@@ -91,11 +93,7 @@ public class ServiceDiscoveryManager {
     }
 
     /**
-<<<<<<< HEAD
-     * Creates a new ServiceDiscoveryManager for a given connection. This means that the 
-=======
      * Creates a new ServiceDiscoveryManager for a given Connection. This means that the 
->>>>>>> remotes/svn_orig/master
      * service manager will respond to any service discovery request that the connection may
      * receive. 
      * 
@@ -135,6 +133,14 @@ public class ServiceDiscoveryManager {
     public static String getIdentityName() {
         return identityName;
     }
+    
+    public static String getIdentityLanguage() {
+		return identityLanguage;
+	}
+
+	public static void setIdentityLanguage(String identityLanguage) {
+		ServiceDiscoveryManager.identityLanguage = identityLanguage;
+	}
 
     /**
      * Sets the name of the client that will be returned when asked for the client identity
@@ -197,7 +203,7 @@ public class ServiceDiscoveryManager {
     public void addDiscoverInfoTo(DiscoverInfo response) {
         // Set this client identity
         DiscoverInfo.Identity identity = new DiscoverInfo.Identity("client",
-                getIdentityName());
+                getIdentityName(), getIdentityLanguage());
         identity.setType(getIdentityType());
         response.addIdentity(identity);
         // Add the registered features to the response
@@ -336,7 +342,7 @@ public class ServiceDiscoveryManager {
                         addDiscoverInfoTo(response);
                         // Set this client identity
                         DiscoverInfo.Identity identity = new DiscoverInfo.Identity("client",
-                                getIdentityName());
+                                getIdentityName(), getIdentityLanguage());
                         identity.setType(getIdentityType());
                         response.addIdentity(identity);
                         // Add the registered features to the response
@@ -769,7 +775,7 @@ public class ServiceDiscoveryManager {
         if (connection instanceof XMPPConnection) {
             if (capsManager != null) {
                 capsManager.calculateEntityCapsVersion(getOwnDiscoverInfo(),
-                        identityType, identityName, features, extendedInfo);
+                        identityType, identityName, identityLanguage,features, extendedInfo);
                 //capsManager.notifyCapsVerListeners();
             }
         }

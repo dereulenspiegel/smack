@@ -248,13 +248,11 @@ public class EntityCapsManager {
 
     void calculateEntityCapsVersion(DiscoverInfo discoverInfo,
             String identityType,
-            String identityName, List<String> features,
+            String identityName, String identityLanguage, List<String> features,
             DataForm extendedInfo) {
         String s = "";
-
         // Add identity
-        // FIXME language
-        s += "client/" + identityType + "//" + identityName + "<";
+        s += "client/" + identityType + "/"+identityLanguage+"/" + identityName + "<";
         StringBuffer buffer = new StringBuffer();
         // Add features
         synchronized (features) {
