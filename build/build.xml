@@ -184,10 +184,10 @@
 
 	<target name="emma.instr" depends="compile, compile-test" description="runs the examples">
 		<emma enabled="${emma.enabled}">
-			<instr destdir="${compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true">
-				<instrpath>
+			<instr instrpath="${compile.dir}" destdir="${compile.instr.dir}" metadatafile="${target}/metadata.emma" merge="true">
+				<!-- <instrpath>
 					<fileset dir="${compile.dir}" includes="**/*.class" />
-				</instrpath>
+				</instrpath> -->
 			</instr>
 		</emma>
 
