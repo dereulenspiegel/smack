@@ -21,7 +21,10 @@
 package org.jivesoftware.smack;
 
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.util.collections.CopyOnWriteWeakArraySet;
+import org.jivesoftware.smack.util.collections.WeakHashSet;
 
+import java.lang.ref.WeakReference;
 import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +45,7 @@ public class Chat {
     private ChatManager chatManager;
     private String threadID;
     private String participant;
-    private final Set<MessageListener> listeners = new CopyOnWriteArraySet<MessageListener>();
+    private final Set<MessageListener> listeners = new CopyOnWriteWeakArraySet<MessageListener>();
 
     /**
      * Creates a new chat with the specified user and thread ID.
