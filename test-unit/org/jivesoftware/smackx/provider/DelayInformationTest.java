@@ -88,7 +88,7 @@ public class DelayInformationTest {
 
     @Test
     public void delayInfoTest() throws Exception {
-        DelayInformationProvider p = new DelayInfoProvider();
+        DelayInformationProvider p = new DelayInformationProvider();
         DelayInfo delayInfo;
         XmlPullParser parser;
         String control;
@@ -133,7 +133,7 @@ public class DelayInformationTest {
 
     @Test
     public void dateFormatsTest() throws Exception {
-        DelayInformationProvider p = new DelayInfoProvider();
+        DelayInformationProvider p = new DelayInformationProvider();
         DelayInfo delayInfo;
         String control;
         GregorianCalendar calendar = new GregorianCalendar(2002, 9 - 1, 10, 23, 8, 25);
