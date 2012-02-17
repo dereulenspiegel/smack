@@ -23,11 +23,10 @@ package org.jivesoftware.smack;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.util.collections.CopyOnWriteWeakArraySet;
 
-import java.lang.ref.WeakReference;
 import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.CopyOnWriteArraySet;
+
 
 /**
  * A chat is a series of messages sent between two users. Each chat has a unique
@@ -125,7 +124,6 @@ public class Chat {
         if(listener == null) {
             return;
         }
-        // TODO these references should be weak.
         listeners.add(listener);
     }
 
